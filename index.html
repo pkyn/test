@@ -535,11 +535,11 @@ var AjaxRequestsHandler = (function () {
 var RProfiler = (function () {
     function RProfiler() {
         var _this = this;
-        this.restUrl = "https://localhost:44394/jp/1826/v3.3.8/s.M";
+        this.restUrl = "portalstage.catchpoint.com/jp/3428/v3.3.7/M";
         this.startTime = (new Date()).getTime();
         this.eventsTimingHandler = new EventsTimingHandler();
         this.inputDelay = new InputDelayHandler();
-        this.version = "v3.3.8";
+        this.version = "v3.3.7";
         this.info = {};
         this.hasInsight = false;
         this.data = {
@@ -629,26 +629,6 @@ var RProfiler = (function () {
                 lcp: _this.lcp
             };
         };
-        this.getUrl = function () {
-            var protocol = window.location.protocol;
-            var iframe = document.createElement("iframe");
-            iframe.src = "about:blank";
-            var style = iframe.style;
-            style.position = "absolute";
-            style.top = "-10000px";
-            style.left = "-1000px";
-            iframe.addEventListener('load', function (event) {
-                var frame = event.currentTarget;
-                if (frame && frame.contentDocument) {
-                    var iframeDocument = frame.contentDocument;
-                    var rumScript = iframeDocument.createElement('script');
-                    rumScript.type = 'text/javascript';
-                    rumScript.src = protocol + '//' + _this.restUrl;
-                    iframeDocument.body.appendChild(rumScript);
-                }
-            });
-            document.body.insertAdjacentElement('afterbegin', iframe);
-        };
         this.eventManager.add(WindowEvent.Load, window, this.recordPageLoad);
         var errorFunc = this.addError;
         this.ajaxHandler = new AjaxRequestsHandler();
@@ -678,6 +658,25 @@ var RProfiler = (function () {
         if (!!window["__cpCdnPath"]) {
             this.restUrl = window["__cpCdnPath"].trim();
         }
+        var protocol = window.location.protocol;
+        var iframe = document.createElement("iframe");
+        iframe.src = "about:blank";
+        var style = iframe.style;
+        style.position = "absolute";
+        style.top = "-10000px";
+        style.left = "-1000px";
+        iframe.addEventListener('load', function (event) {
+            var frame = event.currentTarget;
+            if (frame && frame.contentDocument) {
+                var iframeDocument = frame.contentDocument;
+                var rumScript = iframeDocument.createElement('script');
+                rumScript.type = 'text/javascript';
+                rumScript.src = protocol + '//' + _this.restUrl;
+                iframeDocument.body.appendChild(rumScript);
+            }
+        });
+        var topScript = document.getElementsByTagName("script")[0];
+        topScript.parentNode.insertBefore(iframe, topScript);
     }
     RProfiler.prototype.isNullOrEmpty = function (val) {
         if (val === undefined || val === null) {
@@ -962,11 +961,7 @@ var profiler = new RProfiler();
 window["RProfiler"] = profiler;
 window["WindowEvent"] = WindowEvent;
 profiler.dispatchCustomEvent("GlimpseLoaded");
-document.onreadystatechange = function () {
-    if (document.readyState === 'complete') {
-        profiler.getUrl();
-    }
-};
+
 
   </script>
   </head>
