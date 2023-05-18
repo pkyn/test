@@ -963,12 +963,12 @@ window["RProfiler"] = profiler;
 window["WindowEvent"] = WindowEvent;
 profiler.dispatchCustomEvent("GlimpseLoaded");
 window.onload;
-document.onreadystatechange = function () {
+document.addEventListener("readystatechange", (event) => {
     if (document.readyState === 'complete') {
         var profiler_1 = new RProfiler();
         profiler_1.getUrl();
     }
-};
+});
 
   </script>
   </head>
