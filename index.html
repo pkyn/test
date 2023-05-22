@@ -9,7 +9,7 @@
   <title>Mr. Camel</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 <script>
-  var generateUniqueID = function () {
+var generateUniqueID = function () {
     return "v2-" + Date.now() + "-" + (Math.floor(Math.random() * (9e12 - 1)) + 1e12);
 };
 var firstHiddenTime = -1;
@@ -535,7 +535,7 @@ var AjaxRequestsHandler = (function () {
 var RProfiler = (function () {
     function RProfiler() {
         var _this = this;
-        this.restUrl = "localhost:44394/jp/1826/v3.3.8/s.M";
+        this.restUrl = "localhost:3357/jp/1826/v3.3.8/s.M";
         this.startTime = (new Date()).getTime();
         this.eventsTimingHandler = new EventsTimingHandler();
         this.inputDelay = new InputDelayHandler();
@@ -647,7 +647,9 @@ var RProfiler = (function () {
                     iframeDocument.body.appendChild(rumScript);
                 }
             });
-            document.body.insertAdjacentElement('afterbegin', iframe);
+            if (document.body) {
+                document.body.insertAdjacentElement('afterbegin', iframe);
+            }
         };
         this.eventManager.add(WindowEvent.Load, window, this.recordPageLoad);
         var errorFunc = this.addError;
